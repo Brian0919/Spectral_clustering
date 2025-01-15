@@ -27,6 +27,11 @@ function knn_similarity_graph_full(file_path, k_values, sigma, filename)
         D = create_degree_matrix(W); %Compute Degree matrix
         L = create_laplacian_matrix(D, W); % Compute Laplacian matrix
         
+        % Display the Laplacian matrix
+        figure;
+        spy(L);
+        title(sprintf('Laplacian matrix with k = %d',k));
+
          % Compute eigenvalues and eigenvectors
         [U, D] = compute_eigenvalues(L);
         % Extract eigenvalues as a vector
@@ -36,7 +41,7 @@ function knn_similarity_graph_full(file_path, k_values, sigma, filename)
         figure;
         plot(eigenvalues, Marker="o");
         grid("on");
-        title(sprintf('k= %d',k));
+        title(sprintf('Eigenvalues with k= %d',k));
         
         % Determine number of clusters (M) from graph analysis
         % The threshold was selected from the interpretation of eigenvalues plot
@@ -79,14 +84,14 @@ function knn_similarity_graph_full(file_path, k_values, sigma, filename)
     colors = col(idx_kmean, :);
     figure;
     scatter(X(:,1), X(:,2), 15,colors, 'filled')
-    title(["Kmeans with 3 cluster - ", filename," dataset"], 'Interpreter','none')
+    title(sprintf("Kmeans with 3 cluster - %s dataset", filename))
     
     %compute and plot the single linkage function directly on X
     Z = linkage(X);
     c = cluster(Z,'Maxclust',3);
     figure;
     scatter(X(:,1),X(:,2),10,col(c,:),'filled')
-    title(["Single linkage with 3 cluster - ", filename," dataset"], 'Interpreter','none')
+    title(sprintf("Single linkage with 3 cluster - %s dataset",filename))
 end
 
 %Compute k-nearest neighbor similarity matrix
