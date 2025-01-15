@@ -39,6 +39,7 @@ function knn_similarity_graph_full(file_path, k_values, sigma, filename)
         title(sprintf('k= %d',k));
         
         % Determine number of clusters (M) from graph analysis
+        % The threshold was selected from the interpretation of eigenvalues plot
         if k == 10 && strcmp(filename, 'circle')
             threshold = 10^-2;
         elseif k == 20 && strcmp(filename, 'circle')
@@ -53,6 +54,8 @@ function knn_similarity_graph_full(file_path, k_values, sigma, filename)
             threshold = 3 * 10^-3;
         end
         M = sum(eigenvalues < threshold);
+
+
         % Select the first M eigenvectors
         U = U(:, 1:M); 
         % Perform k-means clustering on the reduced eigenvector space
@@ -65,19 +68,25 @@ function knn_similarity_graph_full(file_path, k_values, sigma, filename)
         colors = col(idx, :);
         figure;
         scatter(X(:,1), X(:,2), 15,colors, 'filled')
+        title(sprintf('k= %d',k))
 
     end
 
-    % compute and plot the kmeans function directly on X 
-    idx_kmean = kmeans(X, M);
+    
+    % compute and plot the kmeans function directly on X
+    % The number of clusters selected is the best M that represent the dataset
+    idx_kmean = kmeans(X, 3);
+    colors = col(idx_kmean, :);
     figure;
-    scatter(X(:,1), X(:,2), 15,colors(idx_kmean, :), 'filled')
-
+    scatter(X(:,1), X(:,2), 15,colors, 'filled')
+    title(["Kmeans with 3 cluster - ", filename," dataset"], 'Interpreter','none')
+    
     %compute and plot the single linkage function directly on X
     Z = linkage(X);
     c = cluster(Z,'Maxclust',3);
     figure;
-    scatter(X(:,1),X(:,2),10,colors(c,:),'filled')
+    scatter(X(:,1),X(:,2),10,col(c,:),'filled')
+    title(["Single linkage with 3 cluster - ", filename," dataset"], 'Interpreter','none')
 end
 
 %Compute k-nearest neighbor similarity matrix
@@ -135,5 +144,6 @@ sigma = 1;  % Gaussian kernel parameter
 
 knn_similarity_graph_full(circle_path, k_values, sigma, 'circle');
 knn_similarity_graph_full(spiral_path, k_values, sigma, 'spiral');
+
 
 
