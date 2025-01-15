@@ -1,0 +1,5 @@
+Ensure MATLAB (R2021a or later) is installed. Statistics and Machine Learning Toolbox is required.
+This MATLAB script processes the two datasets `Circle.csv` and `Spiral.csv`: include these two files in the same folder as `HW_2.m`.
+Open MATLAB and execute `HW_2.m`, the script will generate:
+   - Laplacian matrices and their eigenvalues for different k values (10, 20, 40).
+   - Scatter plots for clustering.
